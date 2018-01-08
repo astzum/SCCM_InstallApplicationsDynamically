@@ -48,7 +48,7 @@ If ($PrimaryUser -eq $null){
 $PrimaryUser = $PrimaryUser.Replace('\','\\')
 
 #Find the Resource ID of Primary User
-$PrimaryUSerID = (Get-WmiObject -ComputerName $SiteServer  -Namespace root\SMS\Site_ES3 -Class SMS_R_USER -Filter "UniqueUserName='$PrimaryUser'").ResourceID
+$PrimaryUSerID = (Get-WmiObject -ComputerName $SiteServer  -Namespace root\SMS\Site_$SiteCode -Class SMS_R_USER -Filter "UniqueUserName='$PrimaryUser'").ResourceID
 LogWrite "PrimaryUserID is $PrimaryUserID"
 
 #Find USer Collection Continer ID 
