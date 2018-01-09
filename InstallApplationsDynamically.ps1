@@ -1,7 +1,13 @@
 <#
 .SYNOPSIS
-
+To install applications dynamically in SCCM during the build process.
 .DESCRIPTION
+The following is required for the script to work:
+ - The device will need to have a primary user assigned to it.
+ - A uniqiue contianer name with the user colections which have applications deployed to it.
+ - Applcation enabled to install during Task Sequence.
+The script will n d collecting the information a .csv file is created with an Application ID and the application name.
+
 
 .NOTES
 
