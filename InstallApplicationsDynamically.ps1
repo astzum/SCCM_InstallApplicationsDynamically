@@ -4,28 +4,35 @@ To install applications dynamically in SCCM during the build process.
 .DESCRIPTION
 The following is required for the script to work:
  - The device will need to have a primary user assigned to it.
- - A uniqiue contianer name with the user colections which have applications deployed to it.
- - Applcation enabled to install during Task Sequence.
+ - A unique container name with the user collections which have applications deployed to it.
+ - Application enabled to install during Task Sequence.
 The script will n d collecting the information a .csv file is created with an Application ID and the application name.
 
-
-.NOTES
+.EXAMPLES
+You will require the Site Server, Sitecode and the unique container name were all the user collections have applications deployed to. 
 
 #>
+########## Param ####################
+
+Param(
+
+[Parameter(Mandatory=$true)]
+[String] $SiteCode,
+[Parameter(Mandatory=$true)]
+[String] $ContainerName,
+[Parameter(Mandatory=$true)]
+[String] $SiteServer
+
+)
+
 
 ################# Functions ################# 
 Function LogWrite
 {
    Param ([string]$logstring)
-
    Add-content "C:\Windows\Temp\Tier3ApplicationScript.log" -value $logstring
 }
 
-####### Variables to set #######
-
-$SiteCode = "AU1"
-$ContainerName = "Tier 3 Applications"
-$SiteServer = "SiteServerName.astzum.local"
 
 ################# Setting Variables #################
 $Count = 1
@@ -44,7 +51,7 @@ foreach ($user in $RelationShipArray){
 
 }
 If ($PrimaryUser -eq $null){
-    LogWrite "Unbale to get the PrimaryUser for the device. Exiting Script."
+    LogWrite "Unable to get the PrimaryUser for the device. Exiting Script."
     Exit 0
     }else{
         LogWrite "PrimaryUser is $PrimaryUser"
@@ -72,7 +79,7 @@ Foreach ($collectionid in $ArrayCollectionId){
     #Serach the collection
     $Collection =  (Get-WmiObject -ComputerName $SiteServer -Class $class -Namespace root\SMS\Site_$SiteCode -filter "ResourceID=$PrimaryUSerID").ResourceID
     
-    #The search results are sucessfull check to see what applications are being deloyed to that collection.
+    #The search results are successful check to see what applications are being deployed to that collection.
         If ($Collection -ne $null){
         LogWrite "User is a member of the collection:$CollectionId"
         $Applications = (Get-WmiObject -ComputerName $SiteServer -Class SMS_ApplicationAssignment -Namespace root/SMS/site_$SiteCode -Filter "TargetCollectionID='$CollectionId' and OfferTypeID='0'").ApplicationName
@@ -81,7 +88,7 @@ Foreach ($collectionid in $ArrayCollectionId){
                 foreach ($ApplicationName in $Applications) {
                 LogWrite "The collection $collectionId has the Application $ApplicationName deployed to it. "
             
-                #Create a Application Varibale for every application needing to be installed.
+                #Create a Application Variable for every application needing to be installed.
                 $Id = "{0:00}" -f $Count
                 $AppId = "AppID$Id"
                 $Count = $Count + 1
