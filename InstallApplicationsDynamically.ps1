@@ -8,8 +8,10 @@ The following is required for the script to work:
  - Application enabled to install during Task Sequence.
 The script will n d collecting the information a .csv file is created with an Application ID and the application name.
 
-.EXAMPLES
-You will require the Site Server, Sitecode and the unique container name were all the user collections have applications deployed to. 
+.EXAMPLE
+You will require the Site Server, Sitecode and the unique container name were all the user collections have applications deployed to.
+
+InstallApplicationsDynamically.ps1 - SiteCode "AU1" -ContainerName "Tier 3 Applications" -SiteServer "SiteServerName.astzum.local"
 
 #>
 ########## Param ####################
